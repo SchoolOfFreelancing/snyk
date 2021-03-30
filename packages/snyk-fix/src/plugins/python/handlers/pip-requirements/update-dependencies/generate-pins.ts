@@ -6,6 +6,7 @@ import { Requirement } from './requirements-file-parser';
 export function generatePins(
   requirements: Requirement[],
   updates: DependencyPins,
+  referenceFileInChanges?: string,
 ): {
   pinnedRequirements: string[];
   changes: FixChangesSummary[];
@@ -36,7 +37,9 @@ export function generatePins(
       const newRequirement = `${pkgName}>=${newVersion}`;
       changes.push({
         success: true,
-        userMessage: `Pinned ${pkgName} from ${version} to ${newVersion}`,
+        userMessage: `Pinned ${pkgName} from ${version} to ${newVersion}${
+          referenceFileInChanges ? ` (pinned in ${referenceFileInChanges})` : ''
+        }`,
       });
       appliedRemediation.push(pkgNameAtVersion);
       return `${newRequirement} # not directly required, pinned by Snyk to avoid a vulnerability`;
